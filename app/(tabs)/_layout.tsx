@@ -1,43 +1,105 @@
+import React from "react";
 import { Tabs } from "expo-router";
-import { HeartIcon, MagnifyingGlassIcon, RectangleStackIcon } from "react-native-heroicons/outline";
-import { View, Text } from 'react-native'
+import { MapIcon, StarIcon, MagnifyingGlassIcon, RectangleStackIcon } from "react-native-heroicons/outline";
+import { View, Text, StyleSheet } from 'react-native'
 import { BlurView } from 'expo-blur';
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import Ionicicons from "@expo/vector-icons/Ionicons";
 
-export default function TabsLayout() {
+
+function TabBarIcon(props: {
+    name: React.ComponentProps<typeof Ionicicons>["name"];
+    color: string;
+}) {
+    return <Ionicicons size={28} {...props} />;
+}
+
+export default function TabLayout() {
+    // const { top } = useSafeAreaInsets();
+    // console.log(top)
     return (
         <Tabs screenOptions={{
-            tabBarStyle: {
-                position: "absolute"
+            headerTransparent: true,
+            headerBackground: function () {
+                return <BlurView intensity={90} tint="dark" className="h-24 top-0 left-0" />
             },
-            tabBarBackground: () => <BlurView intensity={90} tint="dark" className="h-14" />
+            headerTitleStyle: {
+                color: "#ffffff"
+            },
+            tabBarStyle: {
+                position: "absolute",
+                height: 83,
+                borderTopColor: "rgba(234, 234, 234, 0.3)",
+            },
+            tabBarLabelStyle: {
+                fontSize: 13,
+                fontWeight: "600",
+            },
+            tabBarBackground: function () {
+                return <BlurView intensity={90} tint="dark" className=" h-24 bottom-0 left-0" />
+            }
         }} >
             <Tabs.Screen name="today"
                 options={{
-                    title: "Today",
-                    headerShown: false,
-                    tabBarIcon: function (tabInfo) {
+                    title: "Сегодня",
+
+                    header: function () {
                         return (
-                            <RectangleStackIcon
-                                // size={24}
-                                color={tabInfo.color}
+                            <>
+                                <SafeAreaView></SafeAreaView>
+                                <BlurView
+                                    tint="dark"
+                                    intensity={100}
+                                    className='absolute top-0 left-0 right-0 h-12'
+                                // style={{ height: top }}
+                                />
+                            </>
+                        )
+                    },
+
+                    tabBarIcon: ({ color }) => <TabBarIcon name="albums" color={color} />
+                    // function (tabProps) {
+                    //     return (
+                    //         <RectangleStackIcon
+                    //             size={27}
+                    //             color={tabProps.color}
+                    //             // color={tabInfo.focused ? "#006600" : "#8e8e93"}
+                    //             strokeWidth={1.5}
+                    //         />
+                    //     );
+                    // },
+                }}
+            />
+            <Tabs.Screen name="events"
+                options={{
+                    title: "Ивенты",
+                    tabBarIcon: function (tabProps) {
+                        return (
+                            <MapIcon
+                                size={27}
+                                color={tabProps.color}
                                 // color={tabInfo.focused ? "#006600" : "#8e8e93"}
-                                className={"w-6 h-6"}
+                                strokeWidth={1.5}
                             />
                         );
+                    },
+                    headerLeft: function () {
+                        return (
+
+                            <Text>Список</Text>
+                        )
                     },
                 }}
             />
             <Tabs.Screen name="favorite"
                 options={{
-                    title: "Favorite",
-                    headerShown: false,
+                    title: "Избранное",
                     tabBarIcon: function (tabInfo) {
                         return (
-                            <HeartIcon
-                                // size={24}
+                            <StarIcon
+                                size={27}
                                 color={tabInfo.color}
-                                // color={tabInfo.focused ? "#006600" : "#8e8e93"}
-                                className={"w-6 h-6"}
+                                strokeWidth={1.5}
                             />
                         );
                     },
@@ -45,15 +107,13 @@ export default function TabsLayout() {
             />
             <Tabs.Screen name="search"
                 options={{
-                    title: "Seach",
-                    headerShown: false,
+                    title: "Поиск",
                     tabBarIcon: function (tabInfo) {
                         return (
                             <MagnifyingGlassIcon
-                                // size={24}
+                                size={27}
                                 color={tabInfo.color}
-                                // color={tabInfo.focused ? "#006600" : "#8e8e93"}
-                                className={"w-6 h-6"}
+                                strokeWidth={1.5}
                             />
                         );
                     },

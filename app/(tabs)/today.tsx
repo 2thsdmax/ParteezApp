@@ -1,10 +1,16 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 import { Link } from 'expo-router'
 import moment from 'moment'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { BlurView } from 'expo-blur'
+import { Image } from 'expo-image'
+import { useAssets } from 'expo-asset';
 
-export default function Today() {
+const blurhash = "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
+
+export default function TodayScreen() {
     // const x = useBottomTabBarHeight()
     const date = moment().format("dddd, MMMM D")
     const dummyArray = [
@@ -13,65 +19,57 @@ export default function Today() {
         { id: '3', value: 'C' },
         { id: '4', value: 'D' },
         { id: '5', value: 'E' },
-        { id: '6', value: 'F' },
-        { id: '7', value: 'G' },
-        { id: '8', value: 'H' },
-        { id: '9', value: 'I' },
-        { id: '10', value: 'J' },
-        { id: '11', value: 'K' },
-        { id: '12', value: 'L' },
-        { id: '13', value: 'M' },
-        { id: '14', value: 'N' },
-        { id: '15', value: 'O' },
-        { id: '16', value: 'P' },
-        { id: '17', value: 'Q' },
-        { id: '18', value: 'R' },
-        { id: '19', value: 'S' },
-        { id: '20', value: 'T' },
-        { id: '21', value: 'U' },
-        { id: '22', value: 'V' },
-        { id: '23', value: 'W' },
-        { id: '24', value: 'X' },
-        { id: '25', value: 'Y' },
-        { id: '26', value: 'Z' },
     ];
 
     return (
-        <SafeAreaView className='flex-1'>
-            <View className='bg-black px-5 min-h-screen'>
-                <Text className='mt-5 uppercase text-white/50 font-semibold'>{date}</Text>
-                <Text className='mt-2 text-white font-bold text-4xl'>Today</Text>
-                {/* <Link href={{
-                pathname: "/event",
-                params: { id: 123 },
-            }}>
-            Open
-        </Link> */}
-                {/* <Link href="/event/1">Open 1</Link>
-                <Link href="/event/2">Open 2</Link>
-                <Link href="/event/3">Open 3</Link> */}
-                <FlatList
-                    className='pr-2'
-                    data={dummyArray}
-                    keyExtractor={(v, i) => `item_${i}`}
-                    renderItem={function ({ item }) {
-                        return (
-                            <Link
-                                href={`/event/${item.id}`}
-                                className=' h-24 rounded-md bg-white/50 mt-5'
-                            >
-                                <View
-                                >
-                                    {/* {item.id} */}
-                                    <Text>{item.id}</Text>
-                                </View>
-                            </Link>
-                        )
-                    }}
-                >
+        <FlatList
+            className='bg-black'
+            ListHeaderComponent={function () {
+                return (
+                    <>
+                        <SafeAreaView className='px-5'>
+                            <Text className='mt-5 uppercase text-white/50 font-semibold'>{date}</Text>
+                            <Text className='mt-2 text-white font-bold text-4xl'>Today</Text>
+                        </SafeAreaView>
+                    </>
 
-                </FlatList>
-            </View>
-        </SafeAreaView>
+                )
+            }}
+            ItemSeparatorComponent={() => (
+                <View className='h-5' />
+            )}
+            data={dummyArray}
+            keyExtractor={(v, i) => `item_${i}`}
+            renderItem={function ({ item }) {
+                return (
+                    <View className='px-5 border border-red-500'>
+                        <Link
+                            // href='/modal'
+                            // href={`/event/${item.id}`}
+                            href={{ pathname: "/event/[id]", params: { id: item.id } }}
+                            asChild
+                        >
+                            <Pressable className=' bg-white rounded-xl w-full overflow-hidden flex-grow relative'>
+                                <Image
+                                    className='w-full min-h-[400px] border-white'
+                                    // style={{ width: "100%", minHeight: 300, borderRadius: 10 }}
+                                    // source={{ uri: "https://imgproxy.ra.co/_/quality:66/w:1500/rt:fill/aHR0cHM6Ly9pbWFnZXMucmEuY28vYzEwNGZjNWUzOWY5YmIzNjNiOWY4NDZiM2NhMTc4YWYzNDExOWI0My5wbmc=" }}
+                                    source={require('../../assets/images/test-cover.png')}
+                                    placeholder={blurhash}
+                                    contentFit="fill"
+                                    transition={1000}
+
+                                />
+                                <BlurView className='absolute bottom-0 left-0 w-full h-16 px-2 flex flex-col justify-center' >
+                                    <Text className='text-white font-medium text-xl'>БОЛЬШОЙ РЕЙВ</Text>
+                                    <Text className='text-white/60'>Описание</Text>
+                                </BlurView>
+                            </Pressable>
+                        </Link>
+                    </View>
+                )
+            }}
+        >
+        </FlatList>
     )
 }

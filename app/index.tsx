@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router'
 import React from 'react'
 
-export default function StartPage() {
+export default function RootScreen() {
     return <Redirect href="/today" />
 }
